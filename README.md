@@ -9,4 +9,10 @@ This project use an Image Slider, which can slide left or right using touchless 
 
 **Screenshot**
 
+![enter image description here](https://raw.githubusercontent.com/krvarma/Particle-Core-Gesture/master/images/wiring.jpg)
+
+![enter image description here](https://raw.githubusercontent.com/krvarma/Particle-Core-Gesture/master/images/web.png)
+
 **Demo Video**
+
+https://www.youtube.com/watch?v=KKiENmbJnwY
