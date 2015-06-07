@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+    <title>Particle Core and Gesture Sensor Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="normalize.css">
+	<link rel="stylesheet" href="ideal-image-slider.css">
+    <link rel="stylesheet" href="theme-default.css">
+    <style media="screen">
+		#slider {
+			max-width: 900px;
+			margin: 50px auto;
+		}
+		
+		p {
+			display: block;
+			margin-top: 1em;
+			margin-bottom: 1em;
+			margin-left: 0;
+			margin-right: 0;
+			text-align: center;
+			text-
+		}
+    </style>
+</head>
+<body>
+	<h1 style="text-align:center">Particle Core and Gesture Sensor Sample</h1>
+	<p><i>This sample uses <a href="https://store.particle.io/" target="_blank">Particle Core</a>, <a href="https://www.sparkfun.com/products/12787" target="_blank">SparkFun Gesture Sensor</a> and <a href="http://gilbitron.github.io/Ideal-Image-Slider/" target="_blank">Ideal Image Slider JavaScript library</a> to detect touchless gestures and move the image slider.</p> 
+	
+	</br>
+	
+	<p id="sensor-info"><i>Waiting for sensor data...<i></p>
+	
+	<div id="slider">
+		<img src="img/1.jpg" alt="Slide 1" />
+		<img src="img/2.jpg" alt="Slide 2" />
+		<img src="img/3.jpg" alt="Slide 3" />
+		<img src="img/4.jpg" alt="Slide 4" />
+		<img src="img/5.jpg" alt="Slide 5" />
+		<img src="img/6.jpg" alt="Slide 6" />
+		<img src="img/7.jpg" alt="Slide 7" />
+	</div>
+	
+    <script src="ideal-image-slider.js"></script>
+	<script src="./extensions/bullet-nav/iis-bullet-nav.js"></script>
+	<script src="./extensions/captions/iis-captions.js"></script>
+	<script>
+		var slider = new IdealImageSlider.Slider('#slider');
+		
+		slider.addBulletNav();
+		slider.addCaptions();
+		
+		var deviceID = "<<deviceid>>";
+		var accessToken = "<accesstoken>>";
+		var event_name = "GESTURE-EVENT";
+		var eventSource = new EventSource("https://api.spark.io/v1/devices/" + deviceID + "/events/?access_token=" + accessToken);
+
+		eventSource.addEventListener('open', function(e) {
+			console.log("Opened!"); },false);
+
+		eventSource.addEventListener('error', function(e) {
+			console.log("Errored!"); },false);
+
+		eventSource.addEventListener(event_name, function(e) {
+			var parsedData = JSON.parse(e.data);
+			var sensorInfo = document.getElementById("sensor-info");
+
+			sensorInfo.innerHTML = "<i>Gesture: <b>" + parsedData.data + "</b></i>";
+			
+			if("UP" == parsedData.data.toUpperCase()){
+				slider.gotoSlide(1);
+			}
+			else if("DOWN" == parsedData.data.toUpperCase()){
+				slider.gotoSlide(7);
+			}
+			else if("LEFT" == parsedData.data.toUpperCase()){
+				slider.nextSlide();
+			}
+			else if("RIGHT" == parsedData.data.toUpperCase()){
+				slider.previousSlide();
+			}
+			
+		}, false);
+	</script>
+</body>
+</html>
